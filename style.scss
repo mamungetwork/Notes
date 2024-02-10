@@ -247,6 +247,18 @@ button {
     visibility: visible;
   }
 }
+.button_group {
+  display: flex;
+  gap: 16px;
+}
+.modal_check {
+  background: #40b940;
+}
+.modal_delete {
+  background: rgb(244, 24, 24);
+  width: 57px;
+  justify-content: center;
+}
 
 input,
 textarea {

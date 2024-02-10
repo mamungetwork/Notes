@@ -36,7 +36,14 @@ const modalOverlay = document.querySelector(".overlay");
 modalTrigger.forEach((button) => {
   button.addEventListener("click", (e) => {
     modalContent.forEach((content) => {
+      let theID = button.dataset.task_id;
       if (content.dataset.modal_content === button.dataset.modal_trigger) {
+        if (content.dataset.modal_content === "task-card") {
+          content.querySelector("h2").textContent = ourTasks[theID].taskName;
+          content.querySelector("p").textContent = ourTasks[theID].description;
+          content.setAttribute("data-task_id", `${theID}`);
+          console.log(theID);
+        }
         showModal(content);
       }
     });
