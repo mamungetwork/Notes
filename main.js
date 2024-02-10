@@ -91,7 +91,7 @@ function loadAllTask() {
 function deleteTask() {
   const deleteButton = document.querySelectorAll(".delete");
   deleteButton.forEach((button, index) => {
-    let parentCard = button.parentElement.parentElement;
+    let parentCard = button.closest(".task_card");
     let cardIndex = index;
     button.addEventListener("click", (e) => {
       parentCard.remove();
