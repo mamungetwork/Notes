@@ -17,13 +17,31 @@ button {
   cursor: pointer;
 }
 
+.btn {
+  width: 100%;
+  text-align: center;
+  padding: 16px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 0;
+  background: #4631b0;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 .mobile_container {
+  position: relative;
   max-width: 375px;
   width: 100vw;
   min-height: 740px;
   background: #fff;
   padding: 32px 16px 16px;
   border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
 }
 .heading {
   .welcome_text {
@@ -42,20 +60,6 @@ button {
     margin-top: 8px;
     margin-bottom: 32px;
     color: #9da3a8;
-  }
-  .add_task {
-    width: 100%;
-    text-align: center;
-    padding: 16px 24px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 0;
-    background: #4631b0;
-    color: #fff;
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 }
 
@@ -196,4 +200,62 @@ button {
       }
     }
   }
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #000000;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  opacity: 0.7;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+
+  &.show {
+    opacity: 0.7;
+    visibility: visible;
+  }
+}
+.modal_content {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10;
+  background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 20px 40px;
+  border-radius: 30px 30px 0 0;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+
+  h2 {
+    color: #3f3f3f;
+  }
+
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+input,
+textarea {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 0;
+  outline: 0;
+  background: #edf0f5;
+}
+textarea {
+  height: 120px;
 }

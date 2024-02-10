@@ -12,13 +12,26 @@
 
     <main>
         <div class="mobile_container">
+            <div class="overlay"></div>
+            <div data-modal_content="new-task" class="modal_content">
+                <h2>Create New Task</h2>
+                <input class="task_title_field" type="text" value="New task 1 test" placeholder="What you want to do?">
+                <textarea class="task_desc_field" name="" id=""
+                    placeholder="Please describe...">This is a description for a new task</textarea>
+                <button class="btn add_button" type="submit"><i class="fa-solid fa-plus"></i> Add Task</button>
+            </div>
+            <div data-modal_content="task-card" class="modal_content">
+                <h2>Task Title</h2>
+                <p>Description</p>
+            </div>
             <div class="heading">
                 <h1 class="welcome_text">
                     Hello<br><span class="name">Mamun.</span>
                 </h1>
                 <p class="date">Sunday, 12 Marth 2024</p>
 
-                <button class="add_task"><i class="fa-solid fa-plus"></i> Create New Task</button>
+                <button data-modal_trigger="new-task" class="btn"><i class="fa-solid fa-plus"></i> Create New
+                    Task</button>
             </div>
 
             <div class="your_tasks">
@@ -28,7 +41,7 @@
                     <button class="filter">Pending</button>
                     <button class="filter">Completed</button>
                 </div>
-                <p class="tast_count">You have total 32 tasks</p>
+                <p class="tast_count">Loading...</p>
                 <div class="task_group">
 
                 </div>

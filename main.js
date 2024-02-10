@@ -2,22 +2,23 @@
 const theDate = document.querySelector(".date");
 const theTemplate = document.querySelector("template").innerHTML;
 const taskContainer = document.querySelector(".task_group");
+const taskAddButton = document.querySelector(".add_button");
 
 let ourTasks = [
   {
-    id: 1,
+    id: 0,
     taskName: "I Need to go to market",
     description: "I need to go to market at 12:30 PM, to get some food for us",
     status: "Pending",
   },
   {
-    id: 2,
+    id: 1,
     taskName: "Doctor Appointment",
     description: "I need to meet the dentist to checkout my teeth",
     status: "Completed",
   },
   {
-    id: 3,
+    id: 2,
     taskName: "Vacetions",
     description: "Me and my wife want to go on a vacetion after Eid",
     status: "Pending",
@@ -26,8 +27,21 @@ let ourTasks = [
 
 loadDate();
 loadAllTask();
-deleteTask();
-completeTask();
+
+taskAddButton.addEventListener("click", addNewTask);
+
+const modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
+const modalContent = document.querySelectorAll(`[data-modal_content]`);
+const modalOverlay = document.querySelector(".overlay");
+modalTrigger.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    modalContent.forEach((content) => {
+      if (content.dataset.modal_content === button.dataset.modal_trigger) {
+        showModal(content);
+      }
+    });
+  });
+});
 
 function loadDate() {
   const months = [
@@ -62,25 +76,37 @@ function loadDate() {
   theDate.innerHTML = output;
 }
 
-function creteCard(status, taskName, statusText) {
+function creteCard(status, taskName, statusText, id) {
   const newCard = document.createElement("div");
   newCard.classList.add("task_card");
   newCard.classList.add(`${status}`);
   newCard.innerHTML = theTemplate;
+  newCard.setAttribute("data-modal_trigger", "task-card");
+  newCard.setAttribute("data-task_id", `${id}`);
   newCard.querySelector(".task_name").textContent = taskName;
   newCard.querySelector(".status").textContent = statusText;
-  taskContainer.appendChild(newCard);
+  taskContainer.prepend(newCard);
 }
 
 function loadAllTask() {
   for (let i = 0; i < ourTasks.length; i++) {
     switch (ourTasks[i].status) {
       case "Pending":
-        creteCard("pending", ourTasks[i].taskName, ourTasks[i].status);
+        creteCard(
+          "pending",
+          ourTasks[i].taskName,
+          ourTasks[i].status,
+          ourTasks[i].id
+        );
         break;
 
       case "Completed":
-        creteCard("completed", ourTasks[i].taskName, ourTasks[i].status);
+        creteCard(
+          "completed",
+          ourTasks[i].taskName,
+          ourTasks[i].status,
+          ourTasks[i].id
+        );
         break;
     }
   }
@@ -88,32 +114,38 @@ function loadAllTask() {
   updateTaskCount(ourTasks.length, "all");
 }
 
-function deleteTask() {
-  const deleteButton = document.querySelectorAll(".delete");
-  deleteButton.forEach((button, index) => {
-    let parentCard = button.closest(".task_card");
-    let cardIndex = index;
-    button.addEventListener("click", (e) => {
-      parentCard.remove();
-      delete ourTasks[cardIndex];
-      updateTaskCount(document.querySelectorAll(".task_card ").length, "all");
-    });
+let deleteButton = document.querySelectorAll(".delete");
+deleteButton.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    handleDelete(e);
   });
+});
+
+let checkButton = document.querySelectorAll(".check");
+checkButton.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    handleCheckButton(e);
+  });
+});
+
+function handleCheckButton(e) {
+  e.stopPropagation();
+  let parentCard = e.target.closest(".task_card");
+  let theID = parentCard.dataset.task_id;
+  if (ourTasks[theID].status !== "Completed") {
+    ourTasks[theID].status = "Completed";
+    parentCard.classList.replace("pending", "completed");
+    parentCard.querySelector(".status").textContent = "Completed";
+  }
 }
 
-function completeTask() {
-  const checkButton = document.querySelectorAll(".check");
-  checkButton.forEach((button, index) => {
-    let parentCard = button.parentElement.parentElement;
-    let cardIndex = index;
-    button.addEventListener("click", (e) => {
-      if (ourTasks[index].status !== "Completed") {
-        ourTasks[index].status = "Completed";
-        parentCard.classList.replace("pending", "completed");
-        parentCard.querySelector(".status").textContent = "Completed";
-      }
-    });
-  });
+function handleDelete(e) {
+  e.stopPropagation();
+  let parentCard = e.target.closest(".task_card");
+  let theID = parentCard.dataset.task_id;
+  parentCard.remove();
+  delete ourTasks[theID];
+  updateTaskCount(document.querySelectorAll(".task_card ").length, "all");
 }
 
 function updateTaskCount(count, status) {
@@ -132,4 +164,57 @@ function updateTaskCount(count, status) {
       break;
   }
   document.querySelector(".tast_count").innerHTML = output;
+}
+
+modalOverlay.addEventListener("click", (e) => {
+  modalContent.forEach((content) => {
+    hideModal(content);
+  });
+});
+
+function showModal(content) {
+  content.classList.toggle("show");
+  modalOverlay.classList.toggle("show");
+}
+
+function hideModal(content) {
+  content.classList.remove("show");
+  modalOverlay.classList.remove("show");
+}
+
+function addNewTask() {
+  const titleInput = document.querySelector(".task_title_field");
+  const descInput = document.querySelector(".task_desc_field");
+
+  let theTitle = titleInput.value;
+  let theDesc = descInput.value;
+
+  ourTasks.push({});
+  let newTask = ourTasks[ourTasks.length - 1];
+  newTask.id = ourTasks.length;
+  newTask.taskName = theTitle;
+  newTask.description = theDesc;
+  newTask.status = "Pending";
+
+  creteCard("pending", theTitle, "Pending", ourTasks.length - 1);
+  updateTaskCount(document.querySelectorAll(".task_card ").length, "all");
+
+  // Update checkButton NodeList after adding a new task
+  checkButton = document.querySelectorAll(".check");
+  deleteButton = document.querySelectorAll(".delete");
+
+  // Attach event listener to the newly added check button
+  checkButton.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      handleCheckButton(e);
+    });
+  });
+  deleteButton.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      handleDelete(e);
+    });
+  });
+  let content = document.querySelector('[data-modal_content="new-task"]');
+
+  hideModal(content);
 }
