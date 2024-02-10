@@ -177,6 +177,9 @@ button {
       }
     }
     &.completed {
+      background: rgba(64, 185, 64, 0.06);
+      border: 1px solid rgba(64, 185, 64, 0.2);
+      box-shadow: none;
       .status {
         color: #40b940;
       }

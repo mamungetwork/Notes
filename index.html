@@ -30,39 +30,23 @@
                 </div>
                 <p class="tast_count">You have total 32 tasks</p>
                 <div class="task_group">
-                    <div class="task_card pending">
-                        <div class="info">
-                            <h3>Task Name <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button></h3>
-                            <p class="status">Pending</p>
-                        </div>
-                        <div class="actions">
-                            <button class="check"><i class="fa-solid fa-check"></i></button>
-                            <button class="delete"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="task_card completed">
-                        <div class="info">
-                            <h3>Task Name <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button></h3>
-                            <p class="status">Completed</p>
-                        </div>
-                        <div class="actions">
-                            <button class="check"><i class="fa-solid fa-check"></i></button>
-                            <button class="delete"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="task_card pending">
-                        <div class="info">
-                            <h3>Task Name <button class="edit"><i class="fa-solid fa-pen-to-square"></i></button></h3>
-                            <p class="status">Pending</p>
-                        </div>
-                        <div class="actions">
-                            <button class="check"><i class="fa-solid fa-check"></i></button>
-                            <button class="delete"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
+
+        <template>
+            <div class="info">
+                <h3> <span class="task_name">Task Name</span> <button class="edit"><i
+                            class="fa-solid fa-pen-to-square"></i></button>
+                </h3>
+                <p class="status">Status</p>
+            </div>
+            <div class="actions">
+                <button class="check"><i class="fa-solid fa-check"></i></button>
+                <button class="delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </template>
     </main>
 
     <script src="https://kit.fontawesome.com/bf50e79772.js" crossorigin="anonymous"></script>
