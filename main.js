@@ -30,25 +30,39 @@ loadAllTask();
 
 taskAddButton.addEventListener("click", addNewTask);
 
-const modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
+const addTaskBtn = document.querySelector(`[data-modal="new-task"]`);
+let modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
 const modalContent = document.querySelectorAll(`[data-modal_content]`);
 const modalOverlay = document.querySelector(".overlay");
+
+addTaskBtn.addEventListener("click", (e) => {
+  let content = document.querySelector('[data-modal_content="new-task"]');
+  showModal(content);
+});
+
 modalTrigger.forEach((button) => {
   button.addEventListener("click", (e) => {
-    modalContent.forEach((content) => {
-      let theID = button.dataset.task_id;
-      if (content.dataset.modal_content === button.dataset.modal_trigger) {
-        if (content.dataset.modal_content === "task-card") {
-          content.querySelector("h2").textContent = ourTasks[theID].taskName;
-          content.querySelector("p").textContent = ourTasks[theID].description;
-          content.setAttribute("data-task_id", `${theID}`);
-          console.log(theID);
-        }
-        showModal(content);
-      }
-    });
+    handleModal(button);
   });
 });
+
+function handleModal(button) {
+  modalContent.forEach((content) => {
+    let theID = button.dataset.task_id;
+    if (content.dataset.modal_content === button.dataset.modal_trigger) {
+      console.log(content);
+      if (content.dataset.modal_content === "task-card") {
+        content.querySelector("h2").textContent = ourTasks[theID].taskName;
+        content.querySelector("p").textContent = ourTasks[theID].description;
+        content.setAttribute("data-task_id", `${theID}`);
+        content.classList.remove("pending");
+        content.classList.remove("completed");
+        content.classList.add(`${ourTasks[theID].status.toLowerCase()}`);
+      }
+      showModal(content);
+    }
+  });
+}
 
 function loadDate() {
   const months = [
@@ -182,11 +196,13 @@ modalOverlay.addEventListener("click", (e) => {
 function showModal(content) {
   content.classList.toggle("show");
   modalOverlay.classList.toggle("show");
+  document.querySelector(".mobile_container").style.overflow = "hidden";
 }
 
 function hideModal(content) {
   content.classList.remove("show");
   modalOverlay.classList.remove("show");
+  document.querySelector(".mobile_container").style.overflow = "auto";
 }
 
 function addNewTask() {
@@ -209,6 +225,7 @@ function addNewTask() {
   // Update checkButton NodeList after adding a new task
   checkButton = document.querySelectorAll(".check");
   deleteButton = document.querySelectorAll(".delete");
+  modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
 
   // Attach event listener to the newly added check button
   checkButton.forEach((button) => {
@@ -219,6 +236,11 @@ function addNewTask() {
   deleteButton.forEach((button) => {
     button.addEventListener("click", (e) => {
       handleDelete(e);
+    });
+  });
+  modalTrigger.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      handleModal(button);
     });
   });
   let content = document.querySelector('[data-modal_content="new-task"]');

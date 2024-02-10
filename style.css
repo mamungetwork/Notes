@@ -27,6 +27,10 @@ button {
   border: 0;
   background: #4631b0;
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 .btn:hover {
   opacity: 0.8;
@@ -37,10 +41,11 @@ button {
   max-width: 375px;
   width: 100vw;
   min-height: 740px;
+  max-height: 740px;
   background: #fff;
   padding: 32px 16px 16px;
   border-radius: 24px;
-  overflow: hidden;
+  overflow: auto;
   isolation: isolate;
 }
 
@@ -172,6 +177,7 @@ button {
 }
 .your_tasks .task_card.completed .actions button.check {
   opacity: 0.2;
+  cursor: default;
 }
 .your_tasks .task_card.completed .actions button.delete {
   display: flex;
@@ -205,12 +211,13 @@ button {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 20px 40px;
   border-radius: 30px 30px 0 0;
   transform: translateY(100%);
   opacity: 0;
   visibility: hidden;
   transition: 0.3s;
+  padding: 0;
+  max-height: 0px;
 }
 .modal_content h2 {
   color: #3f3f3f;
@@ -219,6 +226,8 @@ button {
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
+  padding: 20px 20px 40px;
+  max-height: max-content;
 }
 
 .button_group {
@@ -247,4 +256,9 @@ textarea {
 
 textarea {
   height: 120px;
+}
+
+.modal_content.completed .modal_check {
+  opacity: 0.3;
+  cursor: default;
 }/*# sourceMappingURL=style.css.map */
