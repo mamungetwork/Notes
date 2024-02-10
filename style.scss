@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Rubik", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 body {
   background: #d6ddea;
@@ -11,6 +11,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+button {
+  cursor: pointer;
 }
 
 .mobile_container {
@@ -24,18 +28,19 @@ body {
 .heading {
   .welcome_text {
     font-size: 2.5rem;
-    color: #222222;
+    color: #3f3f3f;
     font-weight: 400;
+    line-height: 44px;
 
     .name {
-      display: block;
       font-weight: 700;
+      color: #4631b0;
     }
   }
   .date {
     font-size: 1.1rem;
     margin-top: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     color: #9da3a8;
   }
   .add_task {
@@ -43,7 +48,149 @@ body {
     text-align: center;
     padding: 16px 24px;
     font-size: 1rem;
-    border-radius: 60px;
+    border-radius: 8px;
     border: 0;
+    background: #4631b0;
+    color: #fff;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.your_tasks {
+  margin-top: 40px;
+
+  h2 {
+    font-size: 1.2rem;
+    color: #3f3f3f;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    .filter {
+      text-align: center;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      font-weight: 500;
+      border: 0;
+      background: #f4f2ff;
+      color: #9590c1;
+
+      &.active {
+        background: #4631b0;
+        color: #fff;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .tast_count {
+    margin-bottom: 16px;
+    margin-top: 8px;
+    color: #9da3a8;
+  }
+
+  .task_group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .task_card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    padding: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #3f3f3f;
+    }
+
+    .status {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #3f3f3f;
+    }
+
+    .edit {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: #4631b0;
+      font-size: 1.2rem;
+      margin-left: 4px;
+      opacity: 0;
+      visibility: hidden;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      button {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        border: 0;
+
+        &.check {
+          background: #40b940;
+          color: #fff;
+        }
+
+        &.delete {
+          background: rgb(244, 24, 24);
+          color: #fff;
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    &.pending {
+      .status {
+        color: orange;
+      }
+    }
+    &.completed {
+      .status {
+        color: #40b940;
+      }
+      .actions {
+        button {
+          &.check {
+            opacity: 0.2;
+          }
+
+          &.delete {
+            display: flex;
+          }
+        }
+      }
+    }
   }
 }
