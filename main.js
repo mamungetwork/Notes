@@ -49,7 +49,8 @@ addNameBtn.addEventListener("click", () => {
     hideModal(document.querySelector(".get_name_modal"));
     // console.log(theValue);
   } else {
-    warning.style.display = "block";
+    userName.textContent = "Guest";
+    hideModal(document.querySelector(".get_name_modal"));
   }
 });
 taskAddButton.addEventListener("click", addNewTask);
