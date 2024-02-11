@@ -257,7 +257,6 @@ function handleDeleteModal(e) {
   });
 
   hideModal(taskViewModal);
-  console.log(ourTasks);
 }
 
 function updateTaskCount(count, status) {
@@ -297,7 +296,6 @@ function hideModal(content) {
 function addNewTask() {
   const titleInput = document.querySelector(".task_title_field");
   const descInput = document.querySelector(".task_desc_field");
-
   let theTitle = titleInput.value;
   let theDesc = descInput.value;
 
@@ -343,58 +341,31 @@ function addNewTask() {
   hideModal(content);
 }
 
-allFilterBtn.forEach((btn) => {
+allFilterBtn.forEach((btn) =>
   btn.addEventListener("click", (e) => {
-    // Make Btn Active
-    allFilterBtn.forEach((item) => {
-      item.classList.remove("active");
-    });
+    allFilterBtn.forEach((item) => item.classList.remove("active"));
     e.target.classList.add("active");
-
-    let status = e.target.textContent;
-    handleFilter(status);
-  });
-});
+    handleFilter(e.target.textContent);
+  })
+);
 
 function handleFilter(status) {
-  let arrItem;
+  const filterCondition = (card, className) =>
+    card.classList.contains(className)
+      ? (card.style.display = "flex")
+      : (card.style.display = "none");
+
   switch (status) {
     case "All Tasks":
-      taskCard.forEach((card) => {
-        card.style.display = "flex";
-      });
+      taskCard.forEach((card) => (card.style.display = "flex"));
       updateTaskCount(document.querySelectorAll(".task_card ").length, status);
       break;
 
     case "Pending":
-      taskCard.forEach((card) => {
-        card.classList.contains("pending")
-          ? (card.style.display = "flex")
-          : (card.style.display = "none");
-      });
-
-      arrItem = [];
-      ourTasks.forEach((item, index) => {
-        if (item.status === `${status}`) {
-          arrItem.push(item);
-        }
-      });
-      updateTaskCount(arrItem.length, status);
-      break;
-
     case "Completed":
-      taskCard.forEach((card) => {
-        card.classList.contains("completed")
-          ? (card.style.display = "flex")
-          : (card.style.display = "none");
-      });
-      arrItem = [];
-      ourTasks.forEach((item, index) => {
-        if (item.status === `${status}`) {
-          arrItem.push(item);
-        }
-      });
-      updateTaskCount(arrItem.length, status);
+      taskCard.forEach((card) => filterCondition(card, status.toLowerCase()));
+      const filteredTasks = ourTasks.filter((item) => item.status === status);
+      updateTaskCount(filteredTasks.length, status);
       break;
   }
 }
