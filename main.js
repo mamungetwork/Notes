@@ -7,7 +7,6 @@ const taskAddButton = document.querySelector(".add_button");
 const modalCheckBtn = document.querySelector(".modal_check");
 const modalDeleteBtn = document.querySelector(".modal_delete");
 const addTaskBtn = document.querySelector(`[data-modal="new-task"]`);
-let taskCard = document.querySelectorAll(`.task_card`);
 const allModal = document.querySelectorAll(".modal_content");
 const modalOverlay = document.querySelector(".overlay");
 const addNameBtn = document.querySelector(".add_name");
@@ -70,6 +69,7 @@ addTaskBtn.addEventListener("click", (e) => {
   showModal(content);
 });
 
+let taskCard = document.querySelectorAll(`.task_card`);
 taskCard.forEach((card) => {
   card.addEventListener("click", (e) => {
     handleModal(card);
