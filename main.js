@@ -6,6 +6,13 @@ const allFilterBtn = document.querySelectorAll(".filter");
 const taskAddButton = document.querySelector(".add_button");
 const modalCheckBtn = document.querySelector(".modal_check");
 const modalDeleteBtn = document.querySelector(".modal_delete");
+const addTaskBtn = document.querySelector(`[data-modal="new-task"]`);
+let taskCard = document.querySelectorAll(`.task_card`);
+const allModal = document.querySelectorAll(".modal_content");
+const modalOverlay = document.querySelector(".overlay");
+const addNameBtn = document.querySelector(".add_name");
+const usernameField = document.querySelector(".username_field");
+const userName = document.querySelector("span.name");
 
 let ourTasks = [
   {
@@ -28,9 +35,23 @@ let ourTasks = [
   },
 ];
 
+document.addEventListener("DOMContentLoaded", (event) => {
+  showModal(document.querySelector(".get_name_modal"));
+});
 loadDate();
 loadAllTask();
 
+addNameBtn.addEventListener("click", () => {
+  let warning = document.querySelector(".warning");
+  if (!(usernameField.value === "")) {
+    userName.textContent = usernameField.value.split(" ")[0];
+    warning.style.display = "none";
+    hideModal(document.querySelector(".get_name_modal"));
+    // console.log(theValue);
+  } else {
+    warning.style.display = "block";
+  }
+});
 taskAddButton.addEventListener("click", addNewTask);
 modalCheckBtn.addEventListener("click", (e) => {
   handleCheckModal(e);
@@ -39,13 +60,9 @@ modalDeleteBtn.addEventListener("click", (e) => {
   handleDeleteModal(e);
 });
 
-const addTaskBtn = document.querySelector(`[data-modal="new-task"]`);
-let taskCard = document.querySelectorAll(`.task_card`);
 const taskViewModal = document.querySelector(
   `[data-modal_content="task-card"]`
 );
-const allModal = document.querySelectorAll(".modal_content");
-const modalOverlay = document.querySelector(".overlay");
 
 addTaskBtn.addEventListener("click", (e) => {
   let content = document.querySelector('[data-modal_content="new-task"]');
@@ -98,7 +115,7 @@ function loadDate() {
   const month = months[date.getMonth()];
   const day = date.getDate();
   const theDay = days[date.getDay()];
-  const output = `${theDay}, ${day} ${month} ${theYear}`;
+  const output = `<b style="color: #3f3f3f;">It's</b> ${theDay}, ${day} ${month} ${theYear}`;
   theDate.innerHTML = output;
 }
 
@@ -343,6 +360,7 @@ function addNewTask() {
 
 allFilterBtn.forEach((btn) =>
   btn.addEventListener("click", (e) => {
+    taskCard = document.querySelectorAll(`.task_card`);
     allFilterBtn.forEach((item) => item.classList.remove("active"));
     e.target.classList.add("active");
     handleFilter(e.target.textContent);

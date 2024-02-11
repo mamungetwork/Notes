@@ -31,6 +31,7 @@ button {
   justify-content: center;
   align-items: center;
   gap: 8px;
+  transition: 0.3s;
 }
 .btn:hover {
   opacity: 0.8;
@@ -45,15 +46,16 @@ button {
   background: #fff;
   padding: 32px 16px 16px;
   border-radius: 24px;
-  overflow: auto;
   isolation: isolate;
+  scrollbar-width: none;
 }
 
 .page_content {
-  overflow: auto;
   height: 680px;
+  overflow: auto;
   scrollbar-width: none;
 }
+
 .heading .welcome_text {
   font-size: 2.5rem;
   color: #3f3f3f;
@@ -84,6 +86,7 @@ button {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 .your_tasks .filters .filter {
   text-align: center;
@@ -94,13 +97,15 @@ button {
   border: 0;
   background: #f4f2ff;
   color: #9590c1;
+  transition: 0.3s;
+}
+.your_tasks .filters .filter:hover {
+  background: #e0daff;
+  color: #716ca4;
 }
 .your_tasks .filters .filter.active {
   background: #4631b0;
   color: #fff;
-}
-.your_tasks .filters .filter:hover {
-  opacity: 0.8;
 }
 .your_tasks .tast_count {
   margin-bottom: 16px;
@@ -117,10 +122,16 @@ button {
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e0ff;
   padding: 16px;
   border-radius: 12px;
   cursor: pointer;
+  transition: 0.3s;
+}
+.your_tasks .task_card:hover {
+  background: #fbfaff;
+  border: 1px solid #cfc5ff;
+  transform: translateY(-4px) scale(0.99);
 }
 .your_tasks .task_card h3 {
   font-size: 1.1rem;
@@ -157,6 +168,7 @@ button {
   align-items: center;
   border-radius: 4px;
   border: 0;
+  transition: 0.3s;
 }
 .your_tasks .task_card .actions button.check {
   background: #40b940;
@@ -167,7 +179,7 @@ button {
   color: #fff;
 }
 .your_tasks .task_card .actions button:hover {
-  opacity: 0.8;
+  opacity: 0.6;
 }
 .your_tasks .task_card.pending .status {
   color: orange;
@@ -217,12 +229,12 @@ button {
   flex-direction: column;
   gap: 20px;
   border-radius: 30px 30px 0 0;
-  transform: translateY(100%);
+  transform: translateY(-10%);
   opacity: 0;
   visibility: hidden;
   transition: 0.3s;
   padding: 20px 20px 40px;
-  display: none;
+  display: flex;
 }
 .modal_content h2 {
   color: #3f3f3f;
@@ -252,6 +264,7 @@ button {
 
 input,
 textarea {
+  width: 100%;
   padding: 12px 16px;
   border-radius: 8px;
   border: 0;
@@ -266,4 +279,53 @@ textarea {
 .modal_content.completed .modal_check {
   opacity: 0.3;
   cursor: default;
+}
+
+.modal_container {
+  width: 100%;
+  display: flex !important;
+  border-radius: 30px;
+  flex-direction: column;
+  gap: 20px;
+  background: #fff;
+  padding: 20px 20px 40px;
+}
+
+.input {
+  width: 100%;
+}
+
+.warning {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  color: red;
+  display: none;
+}
+
+.get_name_modal {
+  background: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  bottom: 50%;
+  transform: translateY(50%) !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+}
+
+@media screen and (max-width: 420px) {
+  body {
+    align-items: flex-start;
+  }
+  .mobile_container {
+    max-width: 100%;
+    border-radius: 0;
+    height: 100vh;
+    max-height: 100%;
+  }
+  .page_content {
+    height: calc(100vh - 48px);
+    overflow: auto;
+    scrollbar-width: none;
+  }
 }/*# sourceMappingURL=style.css.map */
