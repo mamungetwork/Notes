@@ -2,7 +2,10 @@
 const theDate = document.querySelector(".date");
 const theTemplate = document.querySelector("template").innerHTML;
 const taskContainer = document.querySelector(".task_group");
+const allFilterBtn = document.querySelectorAll(".filter");
 const taskAddButton = document.querySelector(".add_button");
+const modalCheckBtn = document.querySelector(".modal_check");
+const modalDeleteBtn = document.querySelector(".modal_delete");
 
 let ourTasks = [
   {
@@ -29,10 +32,19 @@ loadDate();
 loadAllTask();
 
 taskAddButton.addEventListener("click", addNewTask);
+modalCheckBtn.addEventListener("click", (e) => {
+  handleCheckModal(e);
+});
+modalDeleteBtn.addEventListener("click", (e) => {
+  handleDeleteModal(e);
+});
 
 const addTaskBtn = document.querySelector(`[data-modal="new-task"]`);
-let modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
-const modalContent = document.querySelectorAll(`[data-modal_content]`);
+let taskCard = document.querySelectorAll(`.task_card`);
+const taskViewModal = document.querySelector(
+  `[data-modal_content="task-card"]`
+);
+const allModal = document.querySelectorAll(".modal_content");
 const modalOverlay = document.querySelector(".overlay");
 
 addTaskBtn.addEventListener("click", (e) => {
@@ -40,28 +52,21 @@ addTaskBtn.addEventListener("click", (e) => {
   showModal(content);
 });
 
-modalTrigger.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    handleModal(button);
+taskCard.forEach((card) => {
+  card.addEventListener("click", (e) => {
+    handleModal(card);
   });
 });
 
-function handleModal(button) {
-  modalContent.forEach((content) => {
-    let theID = button.dataset.task_id;
-    if (content.dataset.modal_content === button.dataset.modal_trigger) {
-      console.log(content);
-      if (content.dataset.modal_content === "task-card") {
-        content.querySelector("h2").textContent = ourTasks[theID].taskName;
-        content.querySelector("p").textContent = ourTasks[theID].description;
-        content.setAttribute("data-task_id", `${theID}`);
-        content.classList.remove("pending");
-        content.classList.remove("completed");
-        content.classList.add(`${ourTasks[theID].status.toLowerCase()}`);
-      }
-      showModal(content);
-    }
-  });
+function handleModal(card) {
+  let theID = card.dataset.task_id;
+  taskViewModal.querySelector("h2").textContent = ourTasks[theID].taskName;
+  taskViewModal.querySelector("p").textContent = ourTasks[theID].description;
+  taskViewModal.setAttribute("data-task_id", `${theID}`);
+  taskViewModal.classList.remove("pending");
+  taskViewModal.classList.remove("completed");
+  taskViewModal.classList.add(`${ourTasks[theID].status.toLowerCase()}`);
+  showModal(taskViewModal);
 }
 
 function loadDate() {
@@ -132,7 +137,7 @@ function loadAllTask() {
     }
   }
 
-  updateTaskCount(ourTasks.length, "all");
+  updateTaskCount(ourTasks.length, "All Tasks");
 }
 
 let deleteButton = document.querySelectorAll(".delete");
@@ -158,6 +163,44 @@ function handleCheckButton(e) {
     parentCard.classList.replace("pending", "completed");
     parentCard.querySelector(".status").textContent = "Completed";
   }
+
+  let theStatus, arrItem;
+  allFilterBtn.forEach((btn) => {
+    if (btn.classList.contains("active")) {
+      theStatus = btn.textContent;
+
+      switch (theStatus) {
+        case "Pending":
+          parentCard.style.display = "none";
+          arrItem = [];
+          ourTasks.forEach((item, index) => {
+            if (item.status === `${theStatus}`) {
+              arrItem.push(item);
+            }
+          });
+          console.log(arrItem);
+          updateTaskCount(arrItem.length, theStatus);
+          break;
+      }
+    }
+  });
+}
+
+function handleCheckModal(e) {
+  let modalCard = e.target.closest(".modal_content");
+  let theID = modalCard.dataset.task_id;
+
+  if (ourTasks[theID].status !== "Completed") {
+    ourTasks[theID].status = "Completed";
+
+    taskCard.forEach((card) => {
+      if (card.dataset.task_id === theID) {
+        card.classList.replace("pending", "completed");
+        card.querySelector(".status").textContent = "Completed";
+      }
+    });
+    hideModal(taskViewModal);
+  }
 }
 
 function handleDelete(e) {
@@ -166,21 +209,69 @@ function handleDelete(e) {
   let theID = parentCard.dataset.task_id;
   parentCard.remove();
   delete ourTasks[theID];
-  updateTaskCount(document.querySelectorAll(".task_card ").length, "all");
+  updateTaskCount(document.querySelectorAll(".task_card ").length, "All Tasks");
+
+  let theStatus, arrItem;
+  allFilterBtn.forEach((btn) => {
+    if (btn.classList.contains("active")) {
+      theStatus = btn.textContent;
+
+      switch (theStatus) {
+        case "Pending":
+          arrItem = [];
+          ourTasks.forEach((item, index) => {
+            if (item.status === `${theStatus}`) {
+              arrItem.push(item);
+            }
+          });
+          updateTaskCount(arrItem.length, theStatus);
+          break;
+
+        case "Completed":
+          arrItem = [];
+          ourTasks.forEach((item, index) => {
+            if (item.status === `${theStatus}`) {
+              arrItem.push(item);
+            }
+          });
+          updateTaskCount(arrItem.length, theStatus);
+          break;
+      }
+    }
+  });
+}
+
+function handleDeleteModal(e) {
+  let modalCard = e.target.closest(".modal_content");
+  let theID = modalCard.dataset.task_id;
+
+  taskCard.forEach((card) => {
+    if (card.dataset.task_id === theID) {
+      card.remove();
+      delete ourTasks[theID];
+      updateTaskCount(
+        document.querySelectorAll(".task_card ").length,
+        "All Tasks"
+      );
+    }
+  });
+
+  hideModal(taskViewModal);
+  console.log(ourTasks);
 }
 
 function updateTaskCount(count, status) {
   let output;
   switch (status) {
-    case "all":
+    case "All Tasks":
       output = `You have total ${count} tasks`;
       break;
 
-    case "pending":
+    case "Pending":
       output = `You have total ${count} tasks pending`;
       break;
 
-    case "complete":
+    case "Completed":
       output = `You have completed ${count} tasks`;
       break;
   }
@@ -188,21 +279,19 @@ function updateTaskCount(count, status) {
 }
 
 modalOverlay.addEventListener("click", (e) => {
-  modalContent.forEach((content) => {
-    hideModal(content);
+  allModal.forEach((modal) => {
+    hideModal(modal);
   });
 });
 
 function showModal(content) {
   content.classList.toggle("show");
   modalOverlay.classList.toggle("show");
-  document.querySelector(".mobile_container").style.overflow = "hidden";
 }
 
 function hideModal(content) {
   content.classList.remove("show");
   modalOverlay.classList.remove("show");
-  document.querySelector(".mobile_container").style.overflow = "auto";
 }
 
 function addNewTask() {
@@ -220,30 +309,92 @@ function addNewTask() {
   newTask.status = "Pending";
 
   creteCard("pending", theTitle, "Pending", ourTasks.length - 1);
-  updateTaskCount(document.querySelectorAll(".task_card ").length, "all");
+  updateTaskCount(document.querySelectorAll(".task_card ").length, "All Tasks");
 
   // Update checkButton NodeList after adding a new task
   checkButton = document.querySelectorAll(".check");
   deleteButton = document.querySelectorAll(".delete");
-  modalTrigger = document.querySelectorAll(`[data-modal_trigger]`);
+  taskCard = document.querySelectorAll(`.task_card`);
 
   // Attach event listener to the newly added check button
-  checkButton.forEach((button) => {
+  checkButton.forEach((button, index) => {
     button.addEventListener("click", (e) => {
-      handleCheckButton(e);
+      if (index === 0) {
+        handleCheckButton(e);
+      }
     });
   });
-  deleteButton.forEach((button) => {
+  deleteButton.forEach((button, index) => {
     button.addEventListener("click", (e) => {
-      handleDelete(e);
+      if (index === 0) {
+        handleDelete(e);
+      }
     });
   });
-  modalTrigger.forEach((button) => {
+  taskCard.forEach((button, index) => {
     button.addEventListener("click", (e) => {
-      handleModal(button);
+      if (index === 0) {
+        handleModal(button);
+      }
     });
   });
   let content = document.querySelector('[data-modal_content="new-task"]');
 
   hideModal(content);
+}
+
+allFilterBtn.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    // Make Btn Active
+    allFilterBtn.forEach((item) => {
+      item.classList.remove("active");
+    });
+    e.target.classList.add("active");
+
+    let status = e.target.textContent;
+    handleFilter(status);
+  });
+});
+
+function handleFilter(status) {
+  let arrItem;
+  switch (status) {
+    case "All Tasks":
+      taskCard.forEach((card) => {
+        card.style.display = "flex";
+      });
+      updateTaskCount(document.querySelectorAll(".task_card ").length, status);
+      break;
+
+    case "Pending":
+      taskCard.forEach((card) => {
+        card.classList.contains("pending")
+          ? (card.style.display = "flex")
+          : (card.style.display = "none");
+      });
+
+      arrItem = [];
+      ourTasks.forEach((item, index) => {
+        if (item.status === `${status}`) {
+          arrItem.push(item);
+        }
+      });
+      updateTaskCount(arrItem.length, status);
+      break;
+
+    case "Completed":
+      taskCard.forEach((card) => {
+        card.classList.contains("completed")
+          ? (card.style.display = "flex")
+          : (card.style.display = "none");
+      });
+      arrItem = [];
+      ourTasks.forEach((item, index) => {
+        if (item.status === `${status}`) {
+          arrItem.push(item);
+        }
+      });
+      updateTaskCount(arrItem.length, status);
+      break;
+  }
 }
